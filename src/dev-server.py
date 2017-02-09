@@ -35,9 +35,11 @@ def run(*args):
     httpd.serve_forever()
 
 
-def package(*args):
+def package(outdir='.'):
     import os
     import shutil
+    import tarfile
+    import datetime
 
     destination = 'dist/restful'
     if os.path.isdir(destination):
@@ -64,7 +66,15 @@ def package(*args):
         for req in requirements:
             f.write(f'{req}=={requirements[req]}\n')
 
+    now = datetime.datetime.now()
+    base = now.strftime('fjandinn-%y-%m-%d_%H-%M')
+    filename = base + '.tar.bz2'
+    print(filename)
+    with tarfile.open(os.path.join(outdir, filename), 'w:bz2') as tar:
+        for elem in os.listdir('dist'):
+            tar.add(os.path.join('dist', elem),
+                    arcname=os.path.join(base, elem))
+
 
 if __name__ == '__main__':
-    # main()
-    run()
+    main()

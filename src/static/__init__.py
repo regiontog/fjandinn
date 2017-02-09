@@ -1,6 +1,9 @@
-import mimetypes, os
+import mimetypes
+import os
+
 
 class StaticMiddleware:
+
     def __init__(self, app, exports):
         self.app = app
         self.exports = exports
@@ -10,7 +13,8 @@ class StaticMiddleware:
 
         for url_prefix in self.exports:
             if req_path.startswith(url_prefix):
-                path = os.path.join(self.exports[url_prefix], req_path.lstrip('/'))
+                path = os.path.join(
+                    self.exports[url_prefix], req_path.lstrip('/'))
 
                 if os.path.isfile(path):
                     filetype = mimetypes.guess_type(path, strict=True)[0]

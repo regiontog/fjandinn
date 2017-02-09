@@ -1,8 +1,8 @@
-import { app } from './app';
+/** @jsx h */
 
-import { React } from './react-helper';
-import { Component } from 'react';
-import { render } from 'react-dom';
+import {app} from './app';
+
+import {Component, render, h} from 'preact';
 
 require('../index.html')
 
@@ -12,4 +12,5 @@ const Index = app(class Index extends Component {
     }
 });
 
-render(<Index />, document.getElementById('content'));
+render(
+    <Index/>, document.body);

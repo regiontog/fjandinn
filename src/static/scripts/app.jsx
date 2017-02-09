@@ -1,5 +1,7 @@
-import { Component } from 'react';
-import { React, getDisplayName } from './react-helper'
+/** @jsx h */
+
+import {Component, h} from 'preact';
+import {getDisplayName} from './helper'
 
 export function app(Component) {
   class App extends Component {

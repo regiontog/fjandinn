@@ -1,9 +1,9 @@
+/** @jsx h */
+
 import {app} from './app';
 import {Jform} from './components/base';
 
-import {React} from './react-helper';
-import {Component} from 'react';
-import {render} from 'react-dom';
+import {Component, render, h} from 'preact';
 
 require('../login.html')
 
@@ -23,4 +23,5 @@ const Login = app(class Login extends Component {
     }
 });
 
-render(<Login/>, document.getElementById('content'));
+render(
+    <Login/>, document.body);

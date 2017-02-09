@@ -3,3 +3,4 @@ dist/
 fjandinn-venv/
 node_modules/
 **/*.pyc
+*.tar.bz2
