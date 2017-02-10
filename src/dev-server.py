@@ -41,11 +41,11 @@ def package(outdir='.'):
     import tarfile
     import datetime
 
-    destination = 'dist/restful'
+    destination = os.path.join('dist', 'restful')
     if os.path.isdir(destination):
         shutil.rmtree(destination)
 
-    base = 'src/restful'
+    base = os.path.join('src', 'restful')
     base_len = len(base)
     for dirpath, dirnames, filenames in os.walk(base):
         for filename in filenames:
@@ -58,13 +58,7 @@ def package(outdir='.'):
 
                 shutil.copy(src, os.path.join(dst_dir, filename))
 
-    requirements = {
-        "dsrw": "0.1.3",
-    }
-
-    with open('./dist/requirements.txt', 'w') as f:
-        for req in requirements:
-            f.write(f'{req}=={requirements[req]}\n')
+    shutil.copy('requirements.txt', os.path.join('dist', 'requirements.txt'))
 
     now = datetime.datetime.now()
     base = now.strftime('fjandinn-%y-%m-%d_%H-%M')
