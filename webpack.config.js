@@ -14,51 +14,68 @@ const common_plugins = [
             NODE_ENV: JSON.stringify(process.env.NODE_ENV)
         }
     }),
+    new webpack.LoaderOptionsPlugin({
+        minimize: !debug,
+        debug: debug,
+        sourceMap: debug
+    }),
     new CircularDependencyPlugin({ failOnError: true }),
     new CommonsChunkPlugin({ name: "commons", filename: "common.chunk.js" })
 ]
 
 module.exports = {
     context: path.resolve(__dirname, "./src/static"),
-    debug: debug,
     entry: {
-        index: path.join("scripts", "index.jsx"),
-        login: path.join("scripts", "login.jsx")
+        index: path.join("scripts", "sites", "index.jsx"),
+        login: path.join("scripts", "sites", "login.jsx")
     },
     output: {
         path: path.resolve(__dirname, "./dist/static/scripts"),
         filename: "[name].bundle.js"
     },
     resolve: {
-        root: path.resolve(__dirname, './src/static'),
         extensions: [
-            ".jsx", ".js", "", ".webpack.js", ".web.js"
+            ".jsx", ".js", ".scss", ".webpack.js", ".web.js"
         ],
-        modulesDirectories: ["node_modules"]
+        modules: [
+            path.resolve(__dirname, './src/static'),
+            "node_modules"
+        ]
     },
     module: {
         loaders: [{
-            test: /.jsx?$/,
+            test: /\.jsx?$/,
             loader: 'babel-loader',
             exclude: /node_modules/,
             query: {
                 presets: ['es2015', 'react']
             }
         }, {
-            test: /.html?$/,
+            test: /\.html?$/,
             loader: 'file-loader',
             query: {
                 name: '[path][name].[ext]',
                 outputPath: '../'
-            }
+            },
+        }, {
+            test: /\.scss$/,
+            use: [{
+                loader: 'style-loader'
+            }, {
+                loader: 'css-loader',
+                query: {
+                    modules: true,
+                    localIdentName: '[local]-[hash:base64:5]'
+                }
+            }, {
+                loader: 'sass-loader'
+            }]
         }]
     },
     devtool: debug ?
-        'source-map' :
-        false,
+        'source-map' : false,
     plugins: debug ?
-        common_plugins.concat([]) :
-        common_plugins.concat([
+        common_plugins.concat([]) : common_plugins.concat([
             new DedupePlugin(),
             new OccurrenceOrderPlugin(),
             new UglifyJsPlugin({ sourcemap: false })
